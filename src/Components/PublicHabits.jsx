@@ -10,7 +10,7 @@ const PublicHabits = () => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      toast.success("Public Habits Loaded Successfully!");
+      console.log("Public Habits Loaded Successfully!");
     }
   }, [data]);
 

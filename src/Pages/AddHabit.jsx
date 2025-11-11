@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,19 +7,20 @@ import { AuthContext } from "../Context/AuthContext";
 
 const AddHabit = () => {
   const auth = getAuth();
-  const {user, setUser} = use(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     category: "",
     reminderTime: "",
-    image: null,
+    privacy: "Private",
+    imageUrl: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // ✅ Get Firebase logged-in user
+  // Get Firebase logged-in user
   useEffect(() => {
     const currentUser = auth.currentUser;
     if (currentUser) {
@@ -32,26 +33,8 @@ const AddHabit = () => {
 
   // Handle form input change
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "image") {
-      setFormData({ ...formData, image: files[0] });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-
-  // Upload image to ImgBB (optional)
-  const uploadImageToImgBB = async (imageFile) => {
-    const form = new FormData();
-    form.append("image", imageFile);
-
-    // Replace with your ImgBB API key
-    const res = await fetch(
-      `https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY`,
-      { method: "POST", body: form }
-    );
-    const data = await res.json();
-    return data?.data?.url;
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   // Submit form
@@ -66,25 +49,19 @@ const AddHabit = () => {
     try {
       setIsLoading(true);
 
-      let imageUrl = "";
-      if (formData.image) {
-        imageUrl = await uploadImageToImgBB(formData.image);
-      }
-
       const newHabit = {
         title: formData.title,
         description: formData.description,
         category: formData.category,
         reminderTime: formData.reminderTime,
-        imageUrl: imageUrl || "",
+        imageUrl: formData.imageUrl || "",
         creatorEmail: user?.email || "unknown@example.com",
         creatorName: user?.name || "Anonymous",
-        isPublic: false,
+        isPublic: formData.privacy === "Public",
         createdAt: new Date().toISOString(),
         completionHistory: [],
       };
 
-      // Send to backend API
       const res = await fetch("http://localhost:3050/habits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -99,7 +76,8 @@ const AddHabit = () => {
         description: "",
         category: "",
         reminderTime: "",
-        image: null,
+        privacy: "Private",
+        imageUrl: "",
       });
     } catch (error) {
       console.error(error);
@@ -178,15 +156,30 @@ const AddHabit = () => {
           />
         </div>
 
-        {/* Upload Image */}
+        {/* Privacy */}
         <div>
-          <label className="label font-semibold">Upload Image (optional)</label>
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
+          <label className="label font-semibold">Privacy *</label>
+          <select
+            name="privacy"
+            value={formData.privacy}
             onChange={handleChange}
-            className="file-input file-input-bordered w-full"
+            className="select select-bordered w-full"
+          >
+            <option value="Private">Private</option>
+            <option value="Public">Public</option>
+          </select>
+        </div>
+
+        {/* Image URL */}
+        <div>
+          <label className="label font-semibold">Image URL (optional)</label>
+          <input
+            type="text"
+            name="imageUrl"
+            value={formData.imageUrl}
+            onChange={handleChange}
+            placeholder="https://example.com/image.jpg"
+            className="input input-bordered w-full"
           />
         </div>
 
