@@ -26,6 +26,7 @@ const router = createBrowserRouter([
       {
         path : '/publicHabits',
         Component : PublicHabits,
+        loader : ()=> fetch('http://localhost:3050/habits'),
       },
       {
         path : '/addHabits',
