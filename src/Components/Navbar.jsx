@@ -135,7 +135,7 @@ const Navbar = () => {
               className="flex items-center focus:outline-none"
             >
               <img
-                src={user.photoURL || "https://via.placeholder.com/40"}
+                src={user.photoURL || "fallback-image.png"}
                 alt="User"
                 className="w-10 h-10 rounded-full border-2 border-indigo-500 cursor-pointer"
               />

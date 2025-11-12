@@ -2,6 +2,7 @@ import React from "react";
 import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import icon from '../../src/assets/istockphoto-117247268-612x612.jpg'
+import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   const linkStyle =
@@ -41,7 +42,7 @@ const Footer = () => {
           <h3 className="text-lg font-semibold text-gray-800 mb-3">Follow Us</h3>
           <div className="flex items-center gap-4 text-xl text-gray-500">
             <a href="https://www.facebook.com/" className="hover:text-indigo-600"><FaFacebook /></a>
-            <a href="https://x.com/" className="hover:text-indigo-600"><FaTwitter /></a>
+            <a href="https://x.com/" className="hover:text-indigo-600"><FaXTwitter /></a>
             <a href="https://www.linkedin.com/" className="hover:text-indigo-600"><FaLinkedin /></a>
             <a href="https://www.github.com/" className="hover:text-indigo-600"><FaGithub /></a>
           </div>
