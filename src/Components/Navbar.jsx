@@ -16,15 +16,27 @@ const Navbar = () => {
   const baseLink =
     "flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 text-gray-600 hover:text-indigo-600 hover:bg-indigo-50";
 
+  const activeLink = "text-indigo-700 font-semibold bg-indigo-100";
+
   const links = (
     <>
       <li>
-        <NavLink to="/" className={baseLink}>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `${baseLink} ${isActive ? activeLink : ""}`
+          }
+        >
           <FaHome /> Home
         </NavLink>
       </li>
       <li>
-        <NavLink to="/publicHabits" className={baseLink}>
+        <NavLink
+          to="/publicHabits"
+          className={({ isActive }) =>
+            `${baseLink} ${isActive ? activeLink : ""}`
+          }
+        >
           <FaGlobe /> Public Habits
         </NavLink>
       </li>
@@ -32,12 +44,22 @@ const Navbar = () => {
       {user && (
         <>
           <li>
-            <NavLink to="/myHabits" className={baseLink}>
+            <NavLink
+              to="/myHabits"
+              className={({ isActive }) =>
+                `${baseLink} ${isActive ? activeLink : ""}`
+              }
+            >
               <FaListAlt /> My Habits
             </NavLink>
           </li>
           <li>
-            <NavLink to="/addHabits" className={baseLink}>
+            <NavLink
+              to="/addHabits"
+              className={({ isActive }) =>
+                `${baseLink} ${isActive ? activeLink : ""}`
+              }
+            >
               <FaPlusCircle /> Add Habit
             </NavLink>
           </li>
@@ -45,6 +67,17 @@ const Navbar = () => {
       )}
     </>
   );
+
+  // Helper function to get the display name
+  const getDisplayName = () => {
+    if (!user) return "User";
+    return (
+      user.displayName ||
+      user.providerData?.[0]?.displayName ||
+      user.email?.split("@")[0] ||
+      "User"
+    );
+  };
 
   return (
     <div className="navbar bg-white border-b shadow-sm sticky top-0 z-50">
@@ -111,9 +144,7 @@ const Navbar = () => {
                 onMouseLeave={() => setDropdownOpen(false)}
               >
                 <div className="px-4 py-2 border-b">
-                  <p className="font-semibold text-gray-800">
-                    {user.displayName || "Anonymous User"}
-                  </p>
+                  <p className="font-semibold text-gray-800">{getDisplayName()}</p>
                   <p className="text-sm text-gray-500">
                     {user.email || "No email available"}
                   </p>
