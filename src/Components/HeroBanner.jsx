@@ -2,9 +2,12 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { motion } from "framer-motion";
+import { Typewriter } from "react-simple-typewriter";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
+
 
 const slides = [
   {
@@ -51,7 +54,15 @@ const HeroBanner = () => {
                 className="relative z-10 text-center text-white px-6 max-w-2xl"
               >
                 <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                  {slide.title}
+                  <Typewriter
+                    words={[slide.title]}
+                    loop={1}
+                    cursor
+                    cursorStyle="|"
+                    typeSpeed={70}
+                    deleteSpeed={50}
+                    delaySpeed={2000}
+                  />
                 </h1>
                 <p className="text-lg mb-6">{slide.desc}</p>
                 <a
