@@ -15,6 +15,7 @@ import { ToastContainer } from "react-toastify";
 import LogIn from "./Components/LogIn.jsx";
 import HabitDetails from "./Components/HabitDetails.jsx";
 import PrivateRoute from "./Components/PrivateRoute.jsx";
+import ErrorPage from "./Pages/ErrorPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
         </PrivateRoute>,
       },
       {
-        path: "login",
+        path: "/login",
         Component: LogIn,
       },
       {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path : '*',
+   element : <ErrorPage></ErrorPage>
+  }
 ]);
 
 createRoot(document.getElementById("root")).render(

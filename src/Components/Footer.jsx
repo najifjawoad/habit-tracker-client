@@ -1,6 +1,7 @@
 import React from "react";
 import { FaFacebook, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import icon from '../../src/assets/istockphoto-117247268-612x612.jpg'
 
 const Footer = () => {
   const linkStyle =
@@ -12,7 +13,10 @@ const Footer = () => {
 
         {/* Brand + Description */}
         <div>
-          <h2 className="text-2xl font-bold text-indigo-600 mb-3">Habit Tracker</h2>
+          <div className="flex items-center pb-3">
+            <h2 className="text-2xl font-bold text-indigo-600 ">Habit Tracker</h2>
+          <img className="h-9 w-9" src={icon} alt="" />
+          </div>
           <p className="text-gray-600 leading-relaxed text-sm">
             Build better habits, track consistency, and grow every day.
             Stay motivated and improve yourself, one habit at a time.
@@ -27,6 +31,8 @@ const Footer = () => {
             <li><NavLink to="/addHabits" className={linkStyle}>Add Habit</NavLink></li>
             <li><NavLink to="/myHabits" className={linkStyle}>My Habits</NavLink></li>
             <li><NavLink to="/publicHabits" className={linkStyle}>Browse Public Habits</NavLink></li>
+            <li><a href="">Terms And Conditions</a></li>
+            <li><a href="">Contact Details</a></li>
           </ul>
         </div>
 

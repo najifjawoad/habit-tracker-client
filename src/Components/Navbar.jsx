@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { FaHome, FaPlusCircle, FaListAlt, FaGlobe } from "react-icons/fa";
 import { AuthContext } from "../Context/AuthContext";
+import icon from '../../src/assets/istockphoto-117247268-612x612.jpg'
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -98,9 +99,11 @@ const Navbar = () => {
         <NavLink
           to="/"
           className="text-2xl font-semibold tracking-wide text-indigo-600 hover:text-indigo-800 transition"
+          
         >
           Habit Tracker
         </NavLink>
+        <img className="h-9 w-9 pb-2" src={icon} alt="" />
       </div>
 
       {/* Desktop Menu */}
