@@ -14,6 +14,7 @@ import AuthProvider from "./Context/AuthProvider.jsx";
 import { ToastContainer } from "react-toastify";
 import LogIn from "./Components/LogIn.jsx";
 import HabitDetails from "./Components/HabitDetails.jsx";
+import PrivateRoute from "./Components/PrivateRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -31,16 +32,22 @@ const router = createBrowserRouter([
       },
       {
         path: "/habit-details/:id",
-        Component: HabitDetails,
+        element: <PrivateRoute>
+          <HabitDetails></HabitDetails>
+        </PrivateRoute>,
         loader: () => fetch("http://localhost:3050/habits"),
       },
       {
         path: "/addHabits",
-        Component: AddHabit,
+        element: <PrivateRoute>
+          <AddHabit></AddHabit>
+        </PrivateRoute>,
       },
       {
         path: "/myHabits",
-        Component: Myhabits,
+        element:<PrivateRoute>
+          <Myhabits></Myhabits>
+        </PrivateRoute>,
       },
       {
         path: "login",
