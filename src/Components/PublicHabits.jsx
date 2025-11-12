@@ -1,10 +1,11 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+console.log(motion);
 import { FaFire, FaClock, FaUser } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
 const PublicHabits = () => {
-  const data = useLoaderData(); // fetched from loader
+  const data = useLoaderData(); 
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,7 +21,7 @@ const PublicHabits = () => {
     }
   }, [data]);
 
-  // Update filtered habits whenever search term or category changes
+ 
   useEffect(() => {
     if (!data) return;
 
@@ -60,7 +61,6 @@ const PublicHabits = () => {
           🌿 Public Habit Tracker
         </motion.h1>
 
-        {/* Search & Filter */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
           <input
             type="text"
@@ -82,7 +82,7 @@ const PublicHabits = () => {
           </select>
         </div>
 
-        {/* Habit Cards */}
+        
         {filteredHabits.length === 0 ? (
           <p className="text-center text-gray-500 mt-10">
             No habits match your search or selected category.
@@ -101,12 +101,12 @@ const PublicHabits = () => {
                   whileHover={{ scale: 1.03 }}
                   className="card bg-base-100 shadow-xl relative overflow-hidden border border-base-300 hover:shadow-2xl transition-all duration-200"
                 >
-                  {/* Streak */}
+                 
                   <div className="absolute top-3 right-3 bg-orange-500 text-white text-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
                     <FaFire /> {streak}🔥
                   </div>
 
-                  {/* Image */}
+                  
                   <figure className="h-44 w-full">
                     <img
                       src={
@@ -119,7 +119,7 @@ const PublicHabits = () => {
                     />
                   </figure>
 
-                  {/* Content */}
+                 
                   <div className="card-body">
                     <h2 className="card-title text-lg font-semibold line-clamp-1">
                       {habit.title}

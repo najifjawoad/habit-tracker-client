@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
+console.log(motion);
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAuth } from "firebase/auth";
@@ -20,24 +21,25 @@ const AddHabit = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // Get Firebase logged-in user
+  
   useEffect(() => {
     const currentUser = auth.currentUser;
     if (currentUser) {
       setUser({
         name: currentUser.displayName || "Anonymous",
         email: currentUser.email,
+        photoURL: currentUser.photoURL || "fallback-image.png",
       });
     }
-  }, [auth]);
+  }, [auth, setUser]);
 
-  // Handle form input change
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Submit form
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -111,7 +113,7 @@ const AddHabit = () => {
           />
         </div>
 
-        {/* Description */}
+        
         <div>
           <label className="label font-semibold">Description</label>
           <textarea
@@ -124,7 +126,7 @@ const AddHabit = () => {
           ></textarea>
         </div>
 
-        {/* Category */}
+        
         <div>
           <label className="label font-semibold">Category *</label>
           <select
@@ -143,7 +145,7 @@ const AddHabit = () => {
           </select>
         </div>
 
-        {/* Reminder Time */}
+     
         <div>
           <label className="label font-semibold">Reminder Time *</label>
           <input
@@ -156,7 +158,7 @@ const AddHabit = () => {
           />
         </div>
 
-        {/* Privacy */}
+      
         <div>
           <label className="label font-semibold">Privacy *</label>
           <select
@@ -170,7 +172,7 @@ const AddHabit = () => {
           </select>
         </div>
 
-        {/* Image URL */}
+     
         <div>
           <label className="label font-semibold">Image URL (optional)</label>
           <input
@@ -183,7 +185,7 @@ const AddHabit = () => {
           />
         </div>
 
-        {/* Read-only Firebase User Info */}
+       
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label font-semibold">User Name</label>
@@ -206,7 +208,7 @@ const AddHabit = () => {
           </div>
         </div>
 
-        {/* Submit Button */}
+       
         <div className="pt-4 text-center">
           <button
             type="submit"

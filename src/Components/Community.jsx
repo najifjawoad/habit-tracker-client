@@ -1,9 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
+console.log(motion);
 
 const CommunitySection = () => {
   return (
-    <section className="py-20 bg-gradient-to-br from-indigo-100 via-white to-indigo-50 relative overflow-hidden">
+    <section className="py-20 bg-linear-to-br from-indigo-100 via-white to-indigo-50 relative overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 80 }}
         whileInView={{ opacity: 1, y: 0 }}

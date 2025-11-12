@@ -1,6 +1,7 @@
 import React from "react";
 import { FaListCheck, FaChartBar, FaRocket } from "react-icons/fa6";
 import { motion } from "framer-motion";
+console.log(motion);
 
 const HowItWorks = () => {
   const steps = [

@@ -2,18 +2,13 @@ import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
 import { toast } from "react-toastify";
 
-/**
- * Helper: parse YYYY-MM-DD -> UTC midnight timestamp
- */
+
 const parseDateUTC = (yyyyMmDd) => {
   const [y, m, d] = yyyyMmDd.split("-").map(Number);
   return Date.UTC(y, m - 1, d);
 };
 
-/**
- * Calculate consecutive-day streak ending at the most recent completion.
- * Returns { streak, endsToday (bool) }
- */
+
 const calculateStreak = (completionHistory = []) => {
   if (!Array.isArray(completionHistory) || completionHistory.length === 0)
     return { streak: 0, endsToday: false };
@@ -42,9 +37,7 @@ const calculateStreak = (completionHistory = []) => {
   return { streak, endsToday };
 };
 
-/**
- * Count unique completion days within the last `days` days
- */
+
 const countLastNDays = (completionHistory = [], days = 30) => {
   if (!Array.isArray(completionHistory) || completionHistory.length === 0)
     return 0;
@@ -189,6 +182,7 @@ const MyHabits = () => {
               const { streak, endsToday } = calculateStreak(uniqueHistory);
               const isCompleted = uniqueHistory.includes(today);
               const last30Count = countLastNDays(uniqueHistory, 30);
+              console.log(last30Count);
 
               return (
                 <tr key={habit._id}>

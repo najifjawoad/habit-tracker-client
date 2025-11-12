@@ -6,6 +6,7 @@ import { Typewriter } from "react-simple-typewriter";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+console.log(motion);
 
 
 

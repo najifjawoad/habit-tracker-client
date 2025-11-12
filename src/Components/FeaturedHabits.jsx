@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+console.log(motion);
 import { AuthContext } from "../Context/AuthContext";
 import { FaFire, FaUser, FaClock } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -42,6 +43,7 @@ const FeaturedHabits = () => {
         setHabits(data); 
       } catch (error) {
         toast.error("Failed to fetch featured habits");
+        console.log(error);
       }
     };
 
@@ -68,7 +70,7 @@ const FeaturedHabits = () => {
   }
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-b from-base-200 to-base-300 relative overflow-hidden">
+    <section className="py-16 px-4 bg-linear-to-b from-base-200 to-base-300 relative overflow-hidden">
       <motion.h2
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}

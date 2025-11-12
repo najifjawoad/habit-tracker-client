@@ -1,6 +1,7 @@
 import React from "react";
 import { FaClock, FaBrain, FaChartLine, FaHeart } from "react-icons/fa";
 import { motion } from "framer-motion";
+console.log(motion);
 
 const WhyBuildHabits = () => {
   const reasons = [
@@ -26,7 +27,7 @@ const WhyBuildHabits = () => {
     },
   ];
 
-  // Animation Variants
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -41,8 +42,8 @@ const WhyBuildHabits = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-indigo-50 via-white to-indigo-100 relative overflow-hidden">
-      {/* Decorative background circles */}
+    <section className="py-20 bg-linear-to-br from-indigo-50 via-white to-indigo-100 relative overflow-hidden">
+      
       <div className="absolute top-0 left-0 w-32 h-32 bg-indigo-200 rounded-full blur-3xl opacity-40"></div>
       <div className="absolute bottom-0 right-0 w-40 h-40 bg-indigo-300 rounded-full blur-3xl opacity-40"></div>
 
@@ -69,7 +70,7 @@ const WhyBuildHabits = () => {
           who you become.
         </motion.p>
 
-        {/* Cards Grid */}
+       
         <motion.div
           className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4"
           variants={containerVariants}

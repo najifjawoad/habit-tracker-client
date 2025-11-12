@@ -1,5 +1,6 @@
 import { useParams, useLoaderData, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+console.log(motion);
 import { FaFire, FaClock, FaUser, FaArrowLeft } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
