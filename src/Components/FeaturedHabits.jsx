@@ -29,18 +29,17 @@ const FeaturedHabits = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
-  // Fetch recent habits
+  // Fetch featured habits (newest 6, sorted by server)
   useEffect(() => {
     const fetchHabits = async () => {
       try {
-        const res = await fetch("http://localhost:3050/habits");
+        // --- MODIFIED FETCH URL ---
+        const res = await fetch("http://localhost:3050/habits?featured=true");
+        // --------------------------
         const data = await res.json();
-
-        const sorted = data
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-          .slice(0, 6);
-
-        setHabits(sorted);
+        
+        // Removed client-side sorting and slicing, the data is ready to use
+        setHabits(data); 
       } catch (error) {
         toast.error("Failed to fetch featured habits");
       }
@@ -48,6 +47,12 @@ const FeaturedHabits = () => {
 
     fetchHabits();
   }, []);
+
+  // *********************************************************************************
+  // NOTE: You still need to implement a client-side `calculateStreak` function 
+  // and use it here instead of `habit.completionHistory?.length || 0` 
+  // if you want to display the *consecutive-day streak*. 
+  // *********************************************************************************
 
   const handleViewDetails = (id) => {
     if (!user) {
@@ -106,6 +111,7 @@ const FeaturedHabits = () => {
                 whileHover={{ scale: 1.1 }}
               />
               <div className="absolute top-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-xs shadow-md flex items-center gap-1">
+                {/* Still displaying total completions, consider implementing streak logic here */}
                 <FaFire /> {habit.completionHistory?.length || 0} days
               </div>
             </figure>
