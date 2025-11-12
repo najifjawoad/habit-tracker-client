@@ -24,9 +24,9 @@ const Footer = () => {
           <h3 className="text-lg font-semibold text-gray-800 mb-3">Quick Links</h3>
           <ul className="space-y-2 text-gray-600">
             <li><NavLink to="/" className={linkStyle}>Home</NavLink></li>
-            <li><NavLink to="/add-habit" className={linkStyle}>Add Habit</NavLink></li>
-            <li><NavLink to="/my-habits" className={linkStyle}>My Habits</NavLink></li>
-            <li><NavLink to="/public-habits" className={linkStyle}>Browse Public Habits</NavLink></li>
+            <li><NavLink to="/addHabits" className={linkStyle}>Add Habit</NavLink></li>
+            <li><NavLink to="/myHabits" className={linkStyle}>My Habits</NavLink></li>
+            <li><NavLink to="/publicHabits" className={linkStyle}>Browse Public Habits</NavLink></li>
           </ul>
         </div>
 
@@ -34,10 +34,10 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-3">Follow Us</h3>
           <div className="flex items-center gap-4 text-xl text-gray-500">
-            <a href="#" className="hover:text-indigo-600"><FaFacebook /></a>
-            <a href="#" className="hover:text-indigo-600"><FaTwitter /></a>
-            <a href="#" className="hover:text-indigo-600"><FaLinkedin /></a>
-            <a href="#" className="hover:text-indigo-600"><FaGithub /></a>
+            <a href="https://www.facebook.com/" className="hover:text-indigo-600"><FaFacebook /></a>
+            <a href="https://x.com/" className="hover:text-indigo-600"><FaTwitter /></a>
+            <a href="https://www.linkedin.com/" className="hover:text-indigo-600"><FaLinkedin /></a>
+            <a href="https://www.github.com/" className="hover:text-indigo-600"><FaGithub /></a>
           </div>
         </div>
 

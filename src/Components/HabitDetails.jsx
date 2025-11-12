@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-/* same helpers as in MyHabits (kept local here) */
 const parseDateUTC = (yyyyMmDd) => {
   const [y, m, d] = yyyyMmDd.split("-").map(Number);
   return Date.UTC(y, m - 1, d);
@@ -21,7 +20,7 @@ const calculateStreak = (completionHistory = []) => {
     .filter(Boolean)
     .sort((a, b) => parseDateUTC(b) - parseDateUTC(a));
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
   const mostRecent = sortedDesc[0];
   let streak = 1;
   let prevTs = parseDateUTC(mostRecent);
@@ -44,9 +43,11 @@ const countLastNDays = (completionHistory = [], days = 30) => {
     return 0;
   const uniq = Array.from(new Set(completionHistory));
   const today = new Date();
-  const cutoffTs =
-    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()) -
-    (days - 1) * 24 * 60 * 60 * 1000;
+  const cutoffTs = Date.UTC(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  ) - (days - 1) * 24 * 60 * 60 * 1000;
 
   return uniq.filter((d) => parseDateUTC(d) >= cutoffTs).length;
 };
@@ -58,7 +59,8 @@ const HabitDetails = () => {
 
   useEffect(() => {
     const found = (data || []).find((h) => h._id === id);
-    if (found) setHabit({ ...found, completionHistory: found.completionHistory || [] });
+    if (found)
+      setHabit({ ...found, completionHistory: found.completionHistory || [] });
     else toast.error("Habit not found!");
   }, [id, data]);
 
@@ -73,14 +75,13 @@ const HabitDetails = () => {
     );
   }
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
   const uniqueHistory = Array.from(new Set(habit.completionHistory || []));
   const { streak, endsToday } = calculateStreak(uniqueHistory);
   const isCompletedToday = uniqueHistory.includes(todayStr);
   const last30Count = countLastNDays(uniqueHistory, 30);
   const progress = Math.round((last30Count / 30) * 100);
 
-  // Mark Complete (one-time)
   const markComplete = async () => {
     if (isCompletedToday) {
       toast.info("You've already marked this habit complete today!");
@@ -96,7 +97,6 @@ const HabitDetails = () => {
 
       if (!res.ok) throw new Error("Server failed to add completion");
 
-      // update UI
       setHabit((prev) => ({
         ...prev,
         completionHistory: Array.from(new Set([...(prev.completionHistory || []), todayStr])),
@@ -119,17 +119,13 @@ const HabitDetails = () => {
       <div className="max-w-3xl mx-auto bg-base-100 shadow-2xl rounded-2xl overflow-hidden border border-base-300">
         <figure className="h-72 w-full relative">
           <img
-            src={
-              habit.imageUrl?.trim()
-                ? habit.imageUrl
-                : "https://i.ibb.co.com/MRkH5Pp/default-habit.jpg"
-            }
+            src={habit.imageUrl?.trim() || "https://i.ibb.co.com/MRkH5Pp/default-habit.jpg"}
             alt={habit.title}
             className="w-full h-full object-cover"
           />
           <div className="absolute top-3 right-3 bg-orange-500 text-white text-sm px-3 py-1 rounded-full flex items-center gap-1 shadow">
             <FaFire /> {streak}🔥
-            {!endsToday && streak > 0 ? <span className="ml-2 text-xs opacity-80">last active</span> : null}
+            {!endsToday && streak > 0 && <span className="ml-2 text-xs opacity-80">last active</span>}
           </div>
         </figure>
 
@@ -162,7 +158,7 @@ const HabitDetails = () => {
                   .map((d) => d.trim())
                   .sort((a, b) => parseDateUTC(b) - parseDateUTC(a))
                   .map((date, idx) => (
-                    <li key={idx}>{new Date(date + "T00:00:00Z").toDateString()}</li>
+                    <li key={idx}>{new Date(date + "T00:00:00").toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" })}</li>
                   ))}
               </ul>
             ) : (

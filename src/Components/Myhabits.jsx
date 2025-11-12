@@ -18,21 +18,19 @@ const calculateStreak = (completionHistory = []) => {
   if (!Array.isArray(completionHistory) || completionHistory.length === 0)
     return { streak: 0, endsToday: false };
 
-  // Unique + sort descending by date
   const uniq = Array.from(new Set(completionHistory));
   const sortedDesc = uniq
     .map((s) => s.trim())
     .filter(Boolean)
     .sort((a, b) => parseDateUTC(b) - parseDateUTC(a));
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
   const mostRecent = sortedDesc[0];
   let streak = 1;
   let prevTs = parseDateUTC(mostRecent);
 
   for (let i = 1; i < sortedDesc.length; i++) {
     const ts = parseDateUTC(sortedDesc[i]);
-    // difference in days
     const diffDays = Math.round((prevTs - ts) / (1000 * 60 * 60 * 24));
     if (diffDays === 1) {
       streak++;
@@ -45,7 +43,7 @@ const calculateStreak = (completionHistory = []) => {
 };
 
 /**
- * Count unique completion days within the last `days` days (including today)
+ * Count unique completion days within the last `days` days
  */
 const countLastNDays = (completionHistory = [], days = 30) => {
   if (!Array.isArray(completionHistory) || completionHistory.length === 0)
@@ -53,10 +51,10 @@ const countLastNDays = (completionHistory = [], days = 30) => {
   const uniq = Array.from(new Set(completionHistory));
   const today = new Date();
   const cutoffTs = Date.UTC(
-    today.getUTCFullYear(),
-    today.getUTCMonth(),
-    today.getUTCDate()
-  ) - (days - 1) * 24 * 60 * 60 * 1000; // earliest included day
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  ) - (days - 1) * 24 * 60 * 60 * 1000;
 
   return uniq.filter((d) => parseDateUTC(d) >= cutoffTs).length;
 };
@@ -72,7 +70,6 @@ const MyHabits = () => {
     fetch(`http://localhost:3050/habits?email=${encodeURIComponent(user.email)}`)
       .then((res) => res.json())
       .then((data) => {
-        // ensure completionHistory exists and is array of YYYY-MM-DD strings
         const normalized = (data || []).map((h) => ({
           ...h,
           completionHistory: Array.isArray(h.completionHistory)
@@ -84,13 +81,11 @@ const MyHabits = () => {
       .catch(() => toast.error("Failed to fetch habits"));
   }, [user]);
 
-  // Mark Complete (one-time per day) — uses server PATCH with { action: 'complete', date }
   const markComplete = async (habitId) => {
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
     const habitToUpdate = habits.find((h) => h._id === habitId);
     if (!habitToUpdate) return;
 
-    // Prevent duplicate same-day entry client-side
     if (habitToUpdate.completionHistory.includes(today)) {
       toast.info("You've already marked this habit complete today!");
       return;
@@ -105,15 +100,12 @@ const MyHabits = () => {
 
       if (!res.ok) throw new Error("Server failed to add completion");
 
-      // optimistic + canonical update: add today if not present
       setHabits((prev) =>
         prev.map((h) =>
           h._id === habitId
             ? {
                 ...h,
-                completionHistory: Array.from(
-                  new Set([...(h.completionHistory || []), today])
-                ),
+                completionHistory: Array.from(new Set([...(h.completionHistory || []), today])),
               }
             : h
         )
@@ -126,7 +118,6 @@ const MyHabits = () => {
     }
   };
 
-  // Delete habit
   const deleteHabit = (habitId) => {
     if (!confirm("Are you sure?")) return;
     fetch(`http://localhost:3050/habits/${habitId}`, { method: "DELETE" })
@@ -155,20 +146,15 @@ const MyHabits = () => {
     };
 
     try {
-      const res = await fetch(
-        `http://localhost:3050/habits/${editingHabit._id}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedHabit),
-        }
-      );
+      const res = await fetch(`http://localhost:3050/habits/${editingHabit._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedHabit),
+      });
       if (!res.ok) throw new Error("update failed");
 
       setHabits((prev) =>
-        prev.map((h) =>
-          h._id === editingHabit._id ? { ...h, ...updatedHabit } : h
-        )
+        prev.map((h) => (h._id === editingHabit._id ? { ...h, ...updatedHabit } : h))
       );
       toast.success("Habit updated successfully!");
       setModalOpen(false);
@@ -198,7 +184,7 @@ const MyHabits = () => {
           </thead>
           <tbody>
             {habits.map((habit) => {
-              const today = new Date().toISOString().split("T")[0];
+              const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
               const uniqueHistory = Array.from(new Set(habit.completionHistory || []));
               const { streak, endsToday } = calculateStreak(uniqueHistory);
               const isCompleted = uniqueHistory.includes(today);
@@ -212,7 +198,7 @@ const MyHabits = () => {
                     {streak}
                     {endsToday ? " (active today)" : ""}
                   </td>
-                  <td>{new Date(habit.createdAt).toLocaleDateString()}</td>
+                  <td>{new Date(habit.createdAt).toLocaleDateString("en-CA")}</td>
                   <td className="flex gap-2">
                     <button
                       className={`btn btn-sm ${
@@ -289,13 +275,8 @@ const MyHabits = () => {
                 defaultValue={editingHabit.imageUrl}
                 className="input input-bordered w-full"
               />
-
               <div className="flex justify-end gap-2 mt-2">
-                <button
-                  type="button"
-                  className="btn btn-outline"
-                  onClick={() => setModalOpen(false)}
-                >
+                <button type="button" className="btn btn-outline" onClick={() => setModalOpen(false)}>
                   Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">

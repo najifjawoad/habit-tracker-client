@@ -5,7 +5,7 @@ import { AuthContext } from "../Context/AuthContext";
 import { FaFire, FaUser, FaClock } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-// Animation Variants
+
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
