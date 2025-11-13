@@ -21,7 +21,9 @@ const calculateStreak = (completionHistory = []) => {
     .filter(Boolean)
     .sort((a, b) => parseDateUTC(b) - parseDateUTC(a));
 
-  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
+  const todayStr = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Dhaka",
+  });
   const mostRecent = sortedDesc[0];
   let streak = 1;
   let prevTs = parseDateUTC(mostRecent);
@@ -44,11 +46,9 @@ const countLastNDays = (completionHistory = [], days = 30) => {
     return 0;
   const uniq = Array.from(new Set(completionHistory));
   const today = new Date();
-  const cutoffTs = Date.UTC(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  ) - (days - 1) * 24 * 60 * 60 * 1000;
+  const cutoffTs =
+    Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) -
+    (days - 1) * 24 * 60 * 60 * 1000;
 
   return uniq.filter((d) => parseDateUTC(d) >= cutoffTs).length;
 };
@@ -76,7 +76,9 @@ const HabitDetails = () => {
     );
   }
 
-  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
+  const todayStr = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Dhaka",
+  });
   const uniqueHistory = Array.from(new Set(habit.completionHistory || []));
   const { streak, endsToday } = calculateStreak(uniqueHistory);
   const isCompletedToday = uniqueHistory.includes(todayStr);
@@ -90,17 +92,22 @@ const HabitDetails = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:3050/habits/${habit._id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "complete", date: todayStr }),
-      });
+      const res = await fetch(
+        `https://habittrackerserver-black.vercel.app/habits/${habit._id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "complete", date: todayStr }),
+        }
+      );
 
       if (!res.ok) throw new Error("Server failed to add completion");
 
       setHabit((prev) => ({
         ...prev,
-        completionHistory: Array.from(new Set([...(prev.completionHistory || []), todayStr])),
+        completionHistory: Array.from(
+          new Set([...(prev.completionHistory || []), todayStr])
+        ),
       }));
 
       toast.success("Habit marked complete for today!");
@@ -120,13 +127,18 @@ const HabitDetails = () => {
       <div className="max-w-3xl mx-auto bg-base-100 shadow-2xl rounded-2xl overflow-hidden border border-base-300">
         <figure className="h-72 w-full relative">
           <img
-            src={habit.imageUrl?.trim() || "https://i.ibb.co.com/MRkH5Pp/default-habit.jpg"}
+            src={
+              habit.imageUrl?.trim() ||
+              "https://i.ibb.co.com/MRkH5Pp/default-habit.jpg"
+            }
             alt={habit.title}
             className="w-full h-full object-cover"
           />
           <div className="absolute top-3 right-3 bg-orange-500 text-white text-sm px-3 py-1 rounded-full flex items-center gap-1 shadow">
             <FaFire /> {streak}🔥
-            {!endsToday && streak > 0 && <span className="ml-2 text-xs opacity-80">last active</span>}
+            {!endsToday && streak > 0 && (
+              <span className="ml-2 text-xs opacity-80">last active</span>
+            )}
           </div>
         </figure>
 
@@ -146,20 +158,35 @@ const HabitDetails = () => {
           </div>
 
           <div className="mb-6">
-            <p className="text-sm text-gray-600 mb-1">Progress (last 30 days)</p>
-            <progress className="progress progress-success w-full" value={progress} max="100"></progress>
-            <p className="text-sm text-gray-500 mt-1">{progress}% completed (last 30 days)</p>
+            <p className="text-sm text-gray-600 mb-1">
+              Progress (last 30 days)
+            </p>
+            <progress
+              className="progress progress-success w-full"
+              value={progress}
+              max="100"
+            ></progress>
+            <p className="text-sm text-gray-500 mt-1">
+              {progress}% completed (last 30 days)
+            </p>
           </div>
 
           <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-2">✅ Completion History</h2>
+            <h2 className="text-lg font-semibold mb-2">
+              ✅ Completion History
+            </h2>
             {uniqueHistory.length > 0 ? (
               <ul className="list-disc list-inside text-gray-600 max-h-40 overflow-y-auto">
                 {uniqueHistory
                   .map((d) => d.trim())
                   .sort((a, b) => parseDateUTC(b) - parseDateUTC(a))
                   .map((date, idx) => (
-                    <li key={idx}>{new Date(date + "T00:00:00").toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" })}</li>
+                    <li key={idx}>
+                      {new Date(date + "T00:00:00").toLocaleDateString(
+                        "en-CA",
+                        { timeZone: "Asia/Dhaka" }
+                      )}
+                    </li>
                   ))}
               </ul>
             ) : (
@@ -168,13 +195,20 @@ const HabitDetails = () => {
           </div>
 
           <div className="mt-8 flex justify-between">
-            <Link to="/publicHabits" className="btn btn-outline flex items-center gap-2">
+            <Link
+              to="/publicHabits"
+              className="btn btn-outline flex items-center gap-2"
+            >
               <FaArrowLeft /> Back
             </Link>
             <button
               onClick={markComplete}
               disabled={isCompletedToday}
-              className={`btn ${isCompletedToday ? "btn-success cursor-not-allowed opacity-70" : "btn-primary"}`}
+              className={`btn ${
+                isCompletedToday
+                  ? "btn-success cursor-not-allowed opacity-70"
+                  : "btn-primary"
+              }`}
             >
               {isCompletedToday ? "Completed ✅" : "Mark Complete"}
             </button>

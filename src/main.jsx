@@ -29,26 +29,34 @@ const router = createBrowserRouter([
       {
         path: "/publicHabits",
         Component: PublicHabits,
-        loader: () => fetch("http://localhost:3050/habits"),
+        loader: () =>
+          fetch("https://habittrackerserver-black.vercel.app/habits"),
       },
       {
         path: "/habit-details/:id",
-        element: <PrivateRoute>
-          <HabitDetails></HabitDetails>
-        </PrivateRoute>,
-        loader: () => fetch("http://localhost:3050/habits"),
+        element: (
+          <PrivateRoute>
+            <HabitDetails></HabitDetails>
+          </PrivateRoute>
+        ),
+        loader: () =>
+          fetch("https://habittrackerserver-black.vercel.app/habits"),
       },
       {
         path: "/addHabits",
-        element: <PrivateRoute>
-          <AddHabit></AddHabit>
-        </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <AddHabit></AddHabit>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/myHabits",
-        element:<PrivateRoute>
-          <Myhabits></Myhabits>
-        </PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <Myhabits></Myhabits>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/login",
@@ -61,16 +69,15 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path : '*',
-   element : <ErrorPage></ErrorPage>
-  }
+    path: "*",
+    element: <ErrorPage></ErrorPage>,
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />,
-      <ToastContainer></ToastContainer>
+      <RouterProvider router={router} />,<ToastContainer></ToastContainer>
     </AuthProvider>
   </StrictMode>
 );

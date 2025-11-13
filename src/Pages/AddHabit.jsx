@@ -21,7 +21,6 @@ const AddHabit = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  
   useEffect(() => {
     const currentUser = auth.currentUser;
     if (currentUser) {
@@ -33,13 +32,11 @@ const AddHabit = () => {
     }
   }, [auth, setUser]);
 
-  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
- 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -64,11 +61,14 @@ const AddHabit = () => {
         completionHistory: [],
       };
 
-      const res = await fetch("http://localhost:3050/habits", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newHabit),
-      });
+      const res = await fetch(
+        "https://habittrackerserver-black.vercel.app/habits",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newHabit),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to add habit!");
 
@@ -96,7 +96,9 @@ const AddHabit = () => {
       transition={{ duration: 0.4 }}
       className="max-w-2xl mx-auto p-8 mt-10 bg-base-100 shadow-xl rounded-2xl border border-base-300"
     >
-      <h2 className="text-3xl font-bold text-center mb-6">🪴 Add a New Habit</h2>
+      <h2 className="text-3xl font-bold text-center mb-6">
+        🪴 Add a New Habit
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title */}
@@ -113,7 +115,6 @@ const AddHabit = () => {
           />
         </div>
 
-        
         <div>
           <label className="label font-semibold">Description</label>
           <textarea
@@ -126,7 +127,6 @@ const AddHabit = () => {
           ></textarea>
         </div>
 
-        
         <div>
           <label className="label font-semibold">Category *</label>
           <select
@@ -145,7 +145,6 @@ const AddHabit = () => {
           </select>
         </div>
 
-     
         <div>
           <label className="label font-semibold">Reminder Time *</label>
           <input
@@ -158,7 +157,6 @@ const AddHabit = () => {
           />
         </div>
 
-      
         <div>
           <label className="label font-semibold">Privacy *</label>
           <select
@@ -172,7 +170,6 @@ const AddHabit = () => {
           </select>
         </div>
 
-     
         <div>
           <label className="label font-semibold">Image URL (optional)</label>
           <input
@@ -185,7 +182,6 @@ const AddHabit = () => {
           />
         </div>
 
-       
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label font-semibold">User Name</label>
@@ -208,7 +204,6 @@ const AddHabit = () => {
           </div>
         </div>
 
-       
         <div className="pt-4 text-center">
           <button
             type="submit"

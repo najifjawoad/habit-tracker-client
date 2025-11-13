@@ -2,12 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
 import { toast } from "react-toastify";
 
-
 const parseDateUTC = (yyyyMmDd) => {
   const [y, m, d] = yyyyMmDd.split("-").map(Number);
   return Date.UTC(y, m - 1, d);
 };
-
 
 const calculateStreak = (completionHistory = []) => {
   if (!Array.isArray(completionHistory) || completionHistory.length === 0)
@@ -19,7 +17,9 @@ const calculateStreak = (completionHistory = []) => {
     .filter(Boolean)
     .sort((a, b) => parseDateUTC(b) - parseDateUTC(a));
 
-  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
+  const todayStr = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Dhaka",
+  });
   const mostRecent = sortedDesc[0];
   let streak = 1;
   let prevTs = parseDateUTC(mostRecent);
@@ -37,17 +37,14 @@ const calculateStreak = (completionHistory = []) => {
   return { streak, endsToday };
 };
 
-
 const countLastNDays = (completionHistory = [], days = 30) => {
   if (!Array.isArray(completionHistory) || completionHistory.length === 0)
     return 0;
   const uniq = Array.from(new Set(completionHistory));
   const today = new Date();
-  const cutoffTs = Date.UTC(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  ) - (days - 1) * 24 * 60 * 60 * 1000;
+  const cutoffTs =
+    Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) -
+    (days - 1) * 24 * 60 * 60 * 1000;
 
   return uniq.filter((d) => parseDateUTC(d) >= cutoffTs).length;
 };
@@ -60,7 +57,11 @@ const MyHabits = () => {
 
   useEffect(() => {
     if (!user) return;
-    fetch(`http://localhost:3050/habits?email=${encodeURIComponent(user.email)}`)
+    fetch(
+      `https://habittrackerserver-black.vercel.app/habits?email=${encodeURIComponent(
+        user.email
+      )}`
+    )
       .then((res) => res.json())
       .then((data) => {
         const normalized = (data || []).map((h) => ({
@@ -75,7 +76,9 @@ const MyHabits = () => {
   }, [user]);
 
   const markComplete = async (habitId) => {
-    const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
+    const today = new Date().toLocaleDateString("en-CA", {
+      timeZone: "Asia/Dhaka",
+    });
     const habitToUpdate = habits.find((h) => h._id === habitId);
     if (!habitToUpdate) return;
 
@@ -85,11 +88,14 @@ const MyHabits = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:3050/habits/${habitId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "complete", date: today }),
-      });
+      const res = await fetch(
+        `https://habittrackerserver-black.vercel.app/habits/${habitId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "complete", date: today }),
+        }
+      );
 
       if (!res.ok) throw new Error("Server failed to add completion");
 
@@ -98,7 +104,9 @@ const MyHabits = () => {
           h._id === habitId
             ? {
                 ...h,
-                completionHistory: Array.from(new Set([...(h.completionHistory || []), today])),
+                completionHistory: Array.from(
+                  new Set([...(h.completionHistory || []), today])
+                ),
               }
             : h
         )
@@ -113,7 +121,9 @@ const MyHabits = () => {
 
   const deleteHabit = (habitId) => {
     if (!confirm("Are you sure?")) return;
-    fetch(`http://localhost:3050/habits/${habitId}`, { method: "DELETE" })
+    fetch(`https://habittrackerserver-black.vercel.app/habits/${habitId}`, {
+      method: "DELETE",
+    })
       .then((res) => {
         if (!res.ok) throw new Error("delete failed");
         setHabits((prev) => prev.filter((h) => h._id !== habitId));
@@ -139,15 +149,20 @@ const MyHabits = () => {
     };
 
     try {
-      const res = await fetch(`http://localhost:3050/habits/${editingHabit._id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedHabit),
-      });
+      const res = await fetch(
+        `https://habittrackerserver-black.vercel.app/habits/${editingHabit._id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedHabit),
+        }
+      );
       if (!res.ok) throw new Error("update failed");
 
       setHabits((prev) =>
-        prev.map((h) => (h._id === editingHabit._id ? { ...h, ...updatedHabit } : h))
+        prev.map((h) =>
+          h._id === editingHabit._id ? { ...h, ...updatedHabit } : h
+        )
       );
       toast.success("Habit updated successfully!");
       setModalOpen(false);
@@ -177,8 +192,12 @@ const MyHabits = () => {
           </thead>
           <tbody>
             {habits.map((habit) => {
-              const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
-              const uniqueHistory = Array.from(new Set(habit.completionHistory || []));
+              const today = new Date().toLocaleDateString("en-CA", {
+                timeZone: "Asia/Dhaka",
+              });
+              const uniqueHistory = Array.from(
+                new Set(habit.completionHistory || [])
+              );
               const { streak, endsToday } = calculateStreak(uniqueHistory);
               const isCompleted = uniqueHistory.includes(today);
               const last30Count = countLastNDays(uniqueHistory, 30);
@@ -192,7 +211,9 @@ const MyHabits = () => {
                     {streak}
                     {endsToday ? " (active today)" : ""}
                   </td>
-                  <td>{new Date(habit.createdAt).toLocaleDateString("en-CA")}</td>
+                  <td>
+                    {new Date(habit.createdAt).toLocaleDateString("en-CA")}
+                  </td>
                   <td className="flex gap-2">
                     <button
                       className={`btn btn-sm ${
@@ -270,7 +291,11 @@ const MyHabits = () => {
                 className="input input-bordered w-full"
               />
               <div className="flex justify-end gap-2 mt-2">
-                <button type="button" className="btn btn-outline" onClick={() => setModalOpen(false)}>
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={() => setModalOpen(false)}
+                >
                   Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">

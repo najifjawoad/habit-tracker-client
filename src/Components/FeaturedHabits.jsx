@@ -6,7 +6,6 @@ import { AuthContext } from "../Context/AuthContext";
 import { FaFire, FaUser, FaClock } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -30,17 +29,16 @@ const FeaturedHabits = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
- 
   useEffect(() => {
     const fetchHabits = async () => {
       try {
-       
-        const res = await fetch("http://localhost:3050/habits?featured=true");
-        
+        const res = await fetch(
+          "https://habittrackerserver-black.vercel.app/habits?featured=true"
+        );
+
         const data = await res.json();
-        
-       
-        setHabits(data); 
+
+        setHabits(data);
       } catch (error) {
         toast.error("Failed to fetch featured habits");
         console.log(error);
@@ -49,8 +47,6 @@ const FeaturedHabits = () => {
 
     fetchHabits();
   }, []);
-
-
 
   const handleViewDetails = (id) => {
     if (!user) {
@@ -109,7 +105,6 @@ const FeaturedHabits = () => {
                 whileHover={{ scale: 1.1 }}
               />
               <div className="absolute top-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-xs shadow-md flex items-center gap-1">
-                
                 <FaFire /> {habit.completionHistory?.length || 0} days
               </div>
             </figure>
@@ -149,7 +144,6 @@ const FeaturedHabits = () => {
         ))}
       </motion.div>
 
-     
       <motion.div
         className="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"
         animate={{ y: [0, -20, 0] }}
